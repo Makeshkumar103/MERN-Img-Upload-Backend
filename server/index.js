@@ -23,16 +23,28 @@ app.get('/', (req,res) =>{
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'uploads/'); // Ensure this folder exists in your root
+    // cb(null, './public/Images')
   },
   filename: (req, file, cb) => {
     // Save with a unique name using the current timestamp
-    cb(null, Date.now() + path.extname(file.originalname)); 
+    // cb(null, Date.now() + path.extname(file.originalname)); 
+    cb(null, `${Date.now()}_${file.originalname}`)
   }
 });
 const upload = multer({ storage });
 
 // Route
+// for multiple file use "array" or "fields" instead of single
+
 app.post("/upload", upload.single("image"), async (req, res) => {
+  // console.log(req.body)
+  console.log(req.file);
+  console.log(req.file.filename);
+  console.log(req.file.path);
+
+  //  console.log(res.json.message);
+  // console.log(res.json.filepath);
+  // console.log(res.json.imageUrl);
   try {
      if (!req.file) {
       return res.status(400).json({
@@ -44,19 +56,24 @@ app.post("/upload", upload.single("image"), async (req, res) => {
     res.json({
       message: "Image uploaded successfully",
       filepath: `/uploads/${req.file.filename}`
-    })    ;
+    });
 
     res.status(200).json({
       success: true,
       imageUrl: result.secure_url,
     });
 
+    // console.log(res.json.message);
+    // console.log(res.json.filepath);
+    // console.log(res.json.imageUrl);
+    
+
   } catch (error) {
     res.status(500).json({
       success: false,
       message: "Image upload failed",
     });
-    // console.log(error);
+    console.log(error);
   }
 });
 

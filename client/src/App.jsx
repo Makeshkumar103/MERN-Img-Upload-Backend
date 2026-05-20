@@ -47,7 +47,10 @@ function App() {
         const res = await axios.post("http://localhost:5000/upload",formData,
         {headers: { 'Content-Type': 'multipart/form-data' }}
         );      
-        console.log("Upload success: ",res.data.filePath);   
+        console.log("Upload success: ",res.data.filepath);   
+        console.log("Upload success: ",res.data);
+
+
       } catch (error) {      
         console.log("Upload Error",error);      
       }
